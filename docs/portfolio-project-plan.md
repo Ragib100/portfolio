@@ -473,33 +473,33 @@ Estimated for part-time work (about 10-15 hours a week). Adjust freely.
 - [ ] Collect content (section 10); draft bio and tagline
 
 ### Phase 1: Foundation (3-4 days)
-- [ ] Scaffold Next.js 16 + TypeScript + Tailwind + shadcn/ui
-- [ ] Firebase Admin and client setup; local emulators
-- [ ] Auth flow: Google sign-in, allowlist, session cookie, protected admin layout
+- [x] Scaffold Next.js 16 + TypeScript + Tailwind + shadcn/ui
+- [x] Firebase Admin and client setup
+- [x] Auth flow: Google sign-in, allowlist, session cookie, protected admin layout
 - [ ] Base layouts, design tokens, light/dark theme
 
 **Done when:** you can sign in at `/admin` and non-allowlisted accounts cannot.
 
 #### Console setup to finish before coding (accounts already exist)
 Firebase:
-- [ ] Authentication: enable the **Google** sign-in provider and set the support email
-- [ ] Authorized domains: `localhost` is included by default, which is all you need while developing locally
-- [ ] Firestore: create the database in **production mode** (locked rules; the app accesses data only through the server). **The database location cannot be changed later**, so pick a region close to you and your visitors (for example a South Asia or Southeast Asia region if offered) and double-check before confirming
-- [ ] Project settings: register a **Web app** to get the `NEXT_PUBLIC_FIREBASE_*` values
-- [ ] Project settings → Service accounts: generate a **private key** for the Admin SDK (download the JSON once, keep it out of Git)
+- [x] Authentication: enable the **Google** sign-in provider and set the support email
+- [x] Authorized domains: `localhost` is included by default, which is all you need while developing locally
+- [x] Firestore: create the database in **production mode** (locked rules; the app accesses data only through the server). **The database location cannot be changed later**, so pick a region close to you and your visitors (for example a South Asia or Southeast Asia region if offered) and double-check before confirming
+- [x] Project settings: register a **Web app** to get the `NEXT_PUBLIC_FIREBASE_*` values
+- [x] Project settings → Service accounts: generate a **private key** for the Admin SDK (download the JSON once, keep it out of Git)
 
 Cloudinary:
-- [ ] Copy the **cloud name**, **API key**, and **API secret** from the dashboard
-- [ ] Check the security setting for **PDF and ZIP delivery** and enable it so the CV can be served
-- [ ] Create folders such as `portfolio/projects`, `portfolio/cv`, `portfolio/profile`
+- [x] Copy the **cloud name**, **API key**, and **API secret** from the dashboard
+- [x] Check the security setting for **PDF and ZIP delivery** and enable it so the CV can be served
+- [x] Create folders such as `portfolio/projects`, `portfolio/cv`, `portfolio/profile`
 
 GitHub repo:
-- [ ] Add a `.gitignore` that covers `.env*` and any downloaded service-account JSON
-- [ ] Optionally protect `main` and work on feature branches
+- [x] Add a `.gitignore` that covers `.env*` and any downloaded service-account JSON
+- [x] Optionally protect `main` and work on feature branches
 
 Local environment:
-- [ ] Create `.env.local` from section 6.3, using `NEXT_PUBLIC_SITE_URL=http://localhost:3000` for now
-- [ ] Install Node.js (current LTS) and the Firebase CLI (for the Emulator Suite)
+- [x] Create `.env.local` from section 6.3, using `NEXT_PUBLIC_SITE_URL=http://localhost:3000` for now
+- [x] Install Node.js (current LTS) and the Firebase CLI (for the Emulator Suite - optional)
 
 **Vercel comes last:** because you will create the Vercel project at the end, everything in Phases 1-5 runs locally. At launch (Phase 6), follow section 13: connect the repo, add the environment variables, then add the assigned `vercel.app` hostname to Firebase **Authorized domains** and update `NEXT_PUBLIC_SITE_URL`. Until then, Google sign-in works only on `localhost`.
 
