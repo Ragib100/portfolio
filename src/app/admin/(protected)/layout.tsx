@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getAdminSession } from "@/lib/auth/session";
+import { AdminShell } from "@/components/admin/admin-shell";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -14,10 +15,7 @@ export default function ProtectedAdminLayout({
   return (
     <Suspense
       fallback={
-        <main
-          className="min-h-screen px-6 py-16"
-          aria-busy="true"
-        >
+        <main className="min-h-screen px-6 py-16" aria-busy="true">
           Loading admin…
         </main>
       }
@@ -38,5 +36,6 @@ async function AdminSessionGuard({
     redirect("/admin/login");
   }
 
-  return children;
+  return <AdminShell>{children}</AdminShell>;
+  return <>{children}</>;
 }

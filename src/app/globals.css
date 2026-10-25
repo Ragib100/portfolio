@@ -7,6 +7,12 @@
   --muted: #52525b;
   --border: #e4e4e7;
   --accent: #4f46e5;
+  --admin-sidebar: #fafafa;
+  --admin-line: #e8e8eb;
+  --admin-soft: #f4f4f5;
+  --admin-subtle: #71717a;
+  --admin-chart-bar: #b8b4ee;
+  --admin-chart-hover: #a1a1aa;
   color-scheme: only light;
 }
 

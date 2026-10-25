@@ -1,0 +1,16 @@
+import { Code2, Database, Globe2, Plus, Wrench } from "lucide-react";
+
+const groups = [
+  { name: "Programming languages", icon: Code2, skills: ["C++", "JavaScript", "TypeScript", "Python"] },
+  { name: "Frontend", icon: Globe2, skills: ["React", "Next.js", "Tailwind CSS"] },
+  { name: "Backend & databases", icon: Database, skills: ["Node.js", "Express", "MongoDB", "Firebase"] },
+  { name: "Tools & platforms", icon: Wrench, skills: ["Git", "Linux", "Docker", "Vercel"] },
+];
+
+export default function Page() {
+  return <>
+    <div className="mb-6 flex items-end justify-between gap-5 max-[760px]:items-start"><div><p className="text-[10px] font-semibold tracking-[.09em] text-zinc-400">PORTFOLIO WORKSPACE</p><h1 className="mb-1 mt-2 text-[clamp(23px,2vw,29px)] font-semibold tracking-tight">Skills</h1><p className="text-[13px] text-zinc-500">Organize your technical skills into categories and set their display order.</p></div><button className="flex items-center gap-1.5 rounded-md bg-[var(--accent)] px-3 py-2.5 text-xs font-medium text-white opacity-60" disabled type="button"><Plus size={14} />Add category</button></div>
+    <div className="grid grid-cols-2 gap-4 max-[760px]:grid-cols-1">{groups.map(({ name, icon: Icon, skills }) => <section className="rounded-[9px] border border-[var(--admin-line)] bg-white p-[18px] shadow-sm" key={name}><div className="mb-4"><h2 className="text-[13px] font-semibold">{name}</h2><p className="mt-1 text-[11px] text-zinc-500">{skills.length} skills · Visible on portfolio</p></div><div className="flex flex-wrap gap-2">{skills.map((skill) => <span className="rounded-md border border-zinc-200 bg-zinc-50 px-2.5 py-1.5 text-[11px] text-zinc-700" key={skill}>{skill}</span>)}</div><div className="mt-4 flex items-center gap-2 border-t border-zinc-100 pt-3"><Icon size={14} className="text-zinc-400" /><button type="button" disabled className="text-[11px] text-indigo-700 opacity-60">Edit category</button><button type="button" disabled className="ml-auto flex items-center gap-1 text-[11px] text-zinc-500 opacity-60"><Plus size={13} />Add skill</button></div></section>)}</div>
+    <section className="mt-4 rounded-[9px] border border-[var(--admin-line)] bg-white p-[18px] shadow-sm"><div className="mb-4"><h2 className="text-[13px] font-semibold">Add a skill</h2><p className="mt-1 text-[11px] text-zinc-500">Choose a category and set the ordering for the public page.</p></div><div className="grid grid-cols-3 gap-3 max-[600px]:grid-cols-1">{["Skill name", "Category", "Icon key", "Order"].map((field) => <label key={field} className="flex flex-col gap-1.5 text-[11px] font-medium text-zinc-600">{field}{field === "Category" ? <select className="rounded-md border border-zinc-200 bg-white px-2.5 py-2 text-xs"><option>Programming languages</option><option>Frontend</option><option>Tools &amp; platforms</option></select> : <input className="rounded-md border border-zinc-200 px-2.5 py-2 text-xs" placeholder={`Enter ${field.toLowerCase()}`} />}</label>)}</div><div className="mt-5 flex items-center justify-between gap-3 border-t border-zinc-100 pt-4"><span className="text-[10px] text-zinc-500">Demo data · Changes are not saved</span><button className="rounded-md bg-[var(--accent)] px-3 py-2 text-[11px] font-medium text-white opacity-60" disabled type="button">Add skill</button></div></section>
+  </>;
+}
