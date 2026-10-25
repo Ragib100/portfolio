@@ -54,7 +54,7 @@ export function LoginForm() {
       >
         {pending ? "Signing in…" : "Continue with Google"}
       </button>
-      {error ? <p className="text-sm text-red-700 dark:text-red-300" role="alert">{error}</p> : null}
+      {error ? <p className="text-sm text-red-700" role="alert">{error}</p> : null}
     </div>
   );
 }
