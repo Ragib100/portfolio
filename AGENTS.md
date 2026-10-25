@@ -233,7 +233,9 @@ Always read the site URL from `NEXT_PUBLIC_SITE_URL` (via `src/lib/site.ts`) for
 
 ## 15. Local Development Notes
 
-- Use the Firebase Emulator Suite for Auth and Firestore during development and tests; do not write test data to the real project.
+- **Development uses the real cloud services for now:** the real Firebase project (Auth and Firestore) and the real Cloudinary account, configured through `.env.local`. This is a single-owner project with no live visitors yet, so this is acceptable.
+- Because dev data lives in the real project, keep test records clearly labeled (for example titles starting with `[test]`) and clean them up before launch. Do not delete or overwrite data the owner entered without asking.
+- The Firebase Emulator Suite (Auth and Firestore) is **optional**: use it for automated tests and for risky experiments (bulk writes, migrations, analytics load tests). Cloudinary has no emulator, so uploads always go to the real account; keep test uploads in a `portfolio/_test` folder and delete them afterward.
 - Google sign-in works on `localhost` only until the production domain is added to Firebase **Authorized domains**. Firebase authorized domains do not accept wildcards, so random Vercel preview URLs will not support sign-in.
 - The Vercel project does not exist yet; do not add Vercel-specific config that requires it. Keep the app deployable with standard `next build`.
 

@@ -448,7 +448,7 @@ Tips:
 4. Connect the GitHub repo to Vercel with the working name **`portfolio`**. Vercel project names (and the default `*.vercel.app` URL) must be unique, so a plain `portfolio` is very likely taken and Vercel will assign a variation. Check what URL you actually get. The name is not permanent: you can rename the project or add a custom domain later, and you will update `NEXT_PUBLIC_SITE_URL` and Firebase Authorized domains when the URL changes.
 5. Add the production hostname (`<project-name>.vercel.app`) to **Firebase Auth → Authorized domains**.
 6. Set `NEXT_PUBLIC_SITE_URL` to that URL. Use it for canonical links, Open Graph, `sitemap.xml`, and JSON-LD.
-7. Use the Firebase Emulator Suite for local development. Firebase's authorized-domains list does not accept wildcards, so Google sign-in will not work on randomly named preview deployment URLs; do admin testing locally or on production.
+7. Local development uses the real Firebase project and Cloudinary account (the Firebase Emulator Suite is optional, mainly for automated tests and risky experiments). Firebase's authorized-domains list does not accept wildcards, so Google sign-in will not work on randomly named preview deployment URLs; do admin testing locally or on production. Before launch, remove any test data created during development.
 8. Back up regularly with the admin "Export JSON" button.
 
 ### When you get a domain later
