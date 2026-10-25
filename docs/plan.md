@@ -467,7 +467,7 @@ Estimated for part-time work (about 10-15 hours a week). Adjust freely.
 - [x] Decisions settled (see Decisions Log)
 - [x] Working project name: `portfolio` (revisit when a domain is chosen)
 - [x] Accent color: indigo (temporary); profile photo: temporary placeholder
-- [ ] Choose fonts
+- [x] Choose fonts: Geist Sans for headings and body, with Geist Mono for small accents
 - [x] GitHub repo, Firebase project, and Cloudinary account created
 - [ ] Vercel project: **deferred to the end** (develop locally first; see the note in Phase 1)
 - [ ] Collect content (section 10); draft bio and tagline
