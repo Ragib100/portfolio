@@ -1,6 +1,8 @@
 import { saveProfile } from "./action";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Camera } from "lucide-react";
+import { ImageUpload } from "@/components/admin/image-upload";
+
+const currentProfileImage = "";
 
 const fieldClass =
   "w-full rounded-md border border-zinc-200 bg-white px-3 py-2.5 text-xs text-zinc-800 outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-indigo-100";
@@ -26,33 +28,13 @@ export default function Page() {
       <div className="items-start gap-4 max-[900px]:grid-cols-1">
         <form action={saveProfile} className="space-y-4">
           <section className={panelClass}>
-            <div className="mb-5 flex items-center justify-between gap-3">
-              <div>
-                <h2 className="text-sm font-semibold">Public identity</h2>
-                <p className="mt-1 text-[11px] text-zinc-500">
-                  Your name and introduction lead your portfolio.
-                </p>
-              </div>
-            </div>
-
             <div className="mb-5 flex items-center gap-4 rounded-lg bg-zinc-50 p-4 max-[500px]:items-start max-[500px]:p-3">
-              <div className="grid size-[68px] shrink-0 place-items-center rounded-full bg-[#eeedff] text-xl font-semibold text-[#5145cd]">
-                RH
-              </div>
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-semibold">Profile photo</p>
                 <p className="mt-1 text-[10px] text-zinc-500">
                   Use a square PNG or JPG image, up to 5 MB.
                 </p>
-                <div className="mt-2.5 flex flex-wrap gap-2">
-                  <button
-                    className="flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-2.5 py-1.5 text-[10px] font-medium text-zinc-700 opacity-60"
-                    disabled
-                    type="button"
-                  >
-                    <Camera size={13} /> Upload photo
-                  </button>
-                </div>
+                <ImageUpload currentImageUrl={currentProfileImage}/>
               </div>
             </div>
 

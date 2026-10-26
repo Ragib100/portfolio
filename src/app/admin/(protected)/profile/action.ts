@@ -3,6 +3,7 @@
 export async function saveProfile(formData: FormData) {
   const profile = {
     fullName: String(formData.get("fullName") ?? "").trim(),
+    image: formData.get("image"),
     professionalTitle: String(
       formData.get("professionalTitle") ?? ""
     ).trim(),
