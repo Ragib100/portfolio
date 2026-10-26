@@ -22,7 +22,6 @@ import { SignOutButton } from "@/app/admin/sign-out-button";
 
 const navigation = [
   { label: "Overview", href: "/admin", icon: LayoutDashboard },
-  { label: "Analytics", href: "/admin/analytics", icon: Eye },
   { label: "Profile", href: "/admin/profile", icon: Users },
   { label: "Contact & links", href: "/admin/contact", icon: Mail },
   { label: "CV manager", href: "/admin/cv", icon: FileText },
@@ -30,9 +29,6 @@ const navigation = [
   { label: "Contests", href: "/admin/contests", icon: Trophy },
   { label: "Experience", href: "/admin/experience", icon: BriefcaseBusiness },
   { label: "Skills", href: "/admin/skills", icon: Sparkles },
-  { label: "Integrations", href: "/admin/integrations", icon: GitBranch },
-  { label: "Media library", href: "/admin/media", icon: Upload },
-  { label: "Maintenance", href: "/admin/maintenance", icon: Settings2 },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
@@ -75,23 +71,13 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           <p className="mb-2 mt-7 px-2.5 text-[10px] font-semibold tracking-[.08em] text-zinc-400 max-[760px]:hidden">
             CONTENT
           </p>
-          {navigation.slice(2, 11).map((item) => (
+          {navigation.slice(1).map((item) => (
             <NavItem
               key={item.href}
               {...item}
               active={
                 pathname === item.href || pathname.startsWith(`${item.href}/`)
               }
-            />
-          ))}
-          <p className="mb-2 mt-7 px-2.5 text-[10px] font-semibold tracking-[.08em] text-zinc-400 max-[760px]:hidden">
-            SYSTEM
-          </p>
-          {navigation.slice(11).map((item) => (
-            <NavItem
-              key={item.href}
-              {...item}
-              active={pathname === item.href}
             />
           ))}
         </nav>

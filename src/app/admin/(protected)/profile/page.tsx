@@ -1,11 +1,6 @@
-import {
-  ArrowUpRight,
-  Camera,
-  Check,
-  Eye,
-  MapPin,
-  Sparkles,
-} from "lucide-react";
+import { saveProfile } from "./action";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Camera } from "lucide-react";
 
 const fieldClass =
   "w-full rounded-md border border-zinc-200 bg-white px-3 py-2.5 text-xs text-zinc-800 outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-indigo-100";
@@ -29,7 +24,7 @@ export default function Page() {
       </header>
 
       <div className="items-start gap-4 max-[900px]:grid-cols-1">
-        <div className="space-y-4">
+        <form action={saveProfile} className="space-y-4">
           <section className={panelClass}>
             <div className="mb-5 flex items-center justify-between gap-3">
               <div>
@@ -64,13 +59,13 @@ export default function Page() {
             <div className="grid grid-cols-2 gap-4 max-[600px]:grid-cols-1">
               <label className={labelClass}>
                 <span>Full name</span>
-                <input className={fieldClass} defaultValue="Ragib Hasan" />
+                <input className={fieldClass} name="full-name" />
               </label>
               <label className={labelClass}>
                 <span>Professional title</span>
                 <input
                   className={fieldClass}
-                  defaultValue="Computer Science undergraduate"
+                  name="professional-title"
                 />
               </label>
               <label
@@ -79,25 +74,21 @@ export default function Page() {
                 <span>Tagline</span>
                 <input
                   className={fieldClass}
-                  defaultValue="Competitive programmer & software developer"
+                  name="tagline"
                 />
               </label>
               <label className={labelClass}>
                 <span>Location</span>
                 <input
                   className={fieldClass}
-                  defaultValue="Dhaka, Bangladesh"
+                  name="location"
                 />
               </label>
-              <label className={labelClass}>
-                <span>Availability</span>
-                <select
-                  className={fieldClass}
-                  defaultValue="Open to opportunities"
-                >
-                  <option>Open to opportunities</option>
-                  <option>Not available</option>
-                </select>
+              <label className="flex items-center cursor-pointer gap-2 self-end pb-2 text-[11px] font-medium text-zinc-600">
+                <Checkbox
+                  name="availability"
+                />
+                <span>Available for work</span>
               </label>
               <label
                 className={`${labelClass} col-span-2 max-[600px]:col-span-1`}
@@ -106,21 +97,20 @@ export default function Page() {
                 <textarea
                   className={fieldClass}
                   rows={5}
-                  defaultValue="I am a CSE undergraduate who enjoys solving challenging problems and building useful software."
+                  name="about"
                 />
               </label>
             </div>
             <div className="mt-5 flex justify-end border-t border-zinc-100 pt-4">
               <button
-                className="rounded-md bg-[var(--accent)] px-3 py-2 text-[11px] font-medium text-white opacity-60"
-                disabled
-                type="button"
+                className="rounded-md bg-[var(--accent)] px-3 py-2 text-[11px] font-medium text-white cursor-pointer transition"
+                type="submit"
               >
                 Save profile
               </button>
             </div>
           </section>
-        </div>
+        </form>
       </div>
     </div>
   );

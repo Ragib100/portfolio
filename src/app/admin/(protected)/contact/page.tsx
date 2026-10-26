@@ -11,10 +11,73 @@ const inputClass = "w-full rounded-md border border-zinc-200 bg-white px-2.5 py-
 
 export default function Page() {
   return <>
-    <div className="mb-6 flex items-end justify-between gap-5 max-[760px]:items-start"><div><p className="text-[10px] font-semibold tracking-[.09em] text-zinc-400">PORTFOLIO WORKSPACE</p><h1 className="mb-1 mt-2 text-[clamp(23px,2vw,29px)] font-semibold tracking-tight">Contact &amp; links</h1><p className="text-[13px] text-zinc-500">Manage contact details and decide which links are visible on your public portfolio.</p></div><button className="flex items-center gap-1.5 rounded-md bg-[var(--accent)] px-3 py-2.5 text-xs font-medium text-white opacity-60" disabled type="button"><Plus size={14} />Add link</button></div>
+    <div className="mb-6 flex items-end justify-between gap-5 max-[760px]:items-start">
+      <div>
+        <p className="text-[10px] font-semibold tracking-[.09em] text-zinc-400">PORTFOLIO WORKSPACE</p>
+        <h1 className="mb-1 mt-2 text-[clamp(23px,2vw,29px)] font-semibold tracking-tight">Contact &amp; links</h1>
+        <p className="text-[13px] text-zinc-500">Manage contact details and decide which links are visible on your public portfolio.</p>
+      </div>
+    </div>
     <div className="grid grid-cols-[minmax(0,1.1fr)_minmax(320px,1fr)] items-start gap-4 max-[900px]:grid-cols-1">
-      <section className="rounded-[9px] border border-[var(--admin-line)] bg-white p-[18px] shadow-sm"><div className="mb-4"><h2 className="text-[13px] font-semibold">Contact details</h2><p className="mt-1 text-[11px] text-zinc-500">Email and phone visibility can be managed independently.</p></div><div className="space-y-4"><label className={labelClass}><span>Email address</span><input className={inputClass} defaultValue="hello@example.com" /></label><label className={labelClass}><span>Phone number</span><input className={inputClass} defaultValue="+880 1XXX-XXXXXX" /></label><label className={labelClass}><span>Location</span><input className={inputClass} defaultValue="Dhaka, Bangladesh" /></label></div><div className="mt-4 space-y-3">{["Show email publicly", "Show phone publicly"].map((label, i) => <label key={label} className="flex items-center gap-2 text-[11px] text-zinc-600"><input type="checkbox" defaultChecked={i === 0} className="accent-indigo-600" />{label}</label>)}</div><div className="mt-5 flex items-center justify-between gap-3 border-t border-zinc-100 pt-4"><span className="text-[10px] text-zinc-500">Demo data · Changes are not saved</span><button className="rounded-md bg-[var(--accent)] px-3 py-2 text-[11px] font-medium text-white opacity-60" disabled type="button">Save contact details</button></div></section>
-      <section className="rounded-[9px] border border-[var(--admin-line)] bg-white p-[18px] shadow-sm"><div className="mb-4"><h2 className="text-[13px] font-semibold">Social links</h2><p className="mt-1 text-[11px] text-zinc-500">Drag to reorder. Hidden links are not rendered on the public page.</p></div><div className="space-y-2">{links.map(({ label, value, visible }) => <div className="flex items-center gap-2 rounded-md border border-zinc-200 p-2.5" key={label}><GripVertical size={14} className="shrink-0 text-zinc-400" /><div className="min-w-0 flex-1"><strong className="block text-[11px] font-medium">{label}</strong><small className="block truncate text-[10px] text-zinc-500">{value}</small></div><span className={`flex items-center gap-1 text-[10px] ${visible ? "text-emerald-700" : "text-zinc-400"}`}>{visible ? <Eye size={13} /> : <EyeOff size={13} />}{visible ? "Visible" : "Hidden"}</span><input aria-label={`Show ${label} publicly`} type="checkbox" defaultChecked={visible} className="accent-indigo-600" /></div>)}</div><div className="mt-5 flex items-center justify-between gap-3 border-t border-zinc-100 pt-4"><span className="text-[10px] text-zinc-500">Demo data · Changes are not saved</span><button className="rounded-md bg-[var(--accent)] px-3 py-2 text-[11px] font-medium text-white opacity-60" disabled type="button">Save links</button></div></section>
+      <section className="rounded-[9px] border border-[var(--admin-line)] bg-white p-[18px] shadow-sm">
+        <div className="mb-4">
+          <h2 className="text-[13px] font-semibold">Contact details</h2>
+          <p className="mt-1 text-[11px] text-zinc-500">Email and phone visibility can be managed independently.</p>
+        </div>
+        <div className="space-y-4">
+          <label className={labelClass}>
+            <span>Email address</span>
+            <input className={inputClass} defaultValue="hello@example.com" />
+          </label>
+          <label className={labelClass}>
+            <span>Phone number</span>
+            <input className={inputClass} defaultValue="+880 1XXX-XXXXXX" />
+          </label>
+          <label className={labelClass}>
+            <span>Location</span>
+            <input className={inputClass} defaultValue="Dhaka, Bangladesh" />
+          </label>
+        </div>
+        <div className="mt-4 space-y-3">{["Show email publicly", "Show phone publicly"].map((label, i) => <label key={label} className="flex items-center gap-2 text-[11px] text-zinc-600"><input type="checkbox" defaultChecked={i === 0} className="accent-indigo-600" />{label}</label>)}</div>
+        <div className="mt-5 flex items-center justify-between gap-3 border-t border-zinc-100 pt-4">
+          <button className="rounded-md bg-[var(--accent)] px-3 py-2 text-[11px] font-medium text-white opacity-60" disabled type="button">Save contact details</button>
+        </div>
+      </section>
+      <section className="rounded-[9px] border border-[var(--admin-line)] bg-white p-[18px] shadow-sm">
+        <div className="mb-4">
+          <h2 className="text-[13px] font-semibold">Social links</h2>
+          <p className="mt-1 text-[11px] text-zinc-500">Drag to reorder. Hidden links are not rendered on the public page.</p>
+        </div>
+        <div className="space-y-2">
+          {links.map(({ label, value, visible }) =>
+            <div className="flex items-center gap-2 rounded-md border border-zinc-200 p-2.5" key={label}>
+              <GripVertical size={14} className="shrink-0 text-zinc-400" />
+              <div className="min-w-0 flex-1">
+                <strong className="block text-[11px] font-medium">
+                  {label}
+                </strong>
+                <small className="block truncate text-[10px] text-zinc-500">
+                  {value}
+                </small>
+              </div>
+              <span className={`flex items-center gap-1 text-[10px] ${visible ? "text-emerald-700" : "text-zinc-400"}`}>
+                {visible ? <Eye size={13} /> : <EyeOff size={13} />}
+                {visible ? "Visible" : "Hidden"}
+              </span>
+              <input aria-label={`Show ${label} publicly`} type="checkbox" defaultChecked={visible} className="accent-indigo-600" />
+            </div>)}
+
+        </div>
+        <div className="mt-5 flex items-center justify-between gap-3 border-t border-zinc-100 pt-4">
+          <button className="rounded-md bg-[var(--accent)] px-3 py-2 text-[11px] font-medium text-white opacity-60" disabled type="button">
+            Save links
+          </button>
+          <button className="flex items-center gap-1.5 rounded-md bg-[var(--accent)] px-3 py-2.5 text-xs font-medium text-white opacity-60" disabled type="button">
+            <Plus size={14} />
+            Add link
+          </button>
+        </div>
+      </section>
     </div>
   </>;
 }
