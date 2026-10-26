@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 
 export function SignOutButton() {
   const router = useRouter();
@@ -17,11 +18,12 @@ export function SignOutButton() {
 
   return (
     <button
-      className={`${pending ? "cursor-progress" : "cursor-pointer"} rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium transition hover:border-[var(--accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`}
+      className={`${pending ? "cursor-progress" : "cursor-pointer"} w-full rounded-md border border-[var(--admin-line)] px-3 py-2 text-xs font-medium text-zinc-700 transition hover:border-red-300 hover:bg-red-50 hover:text-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`}
       type="button"
       onClick={handleSignOut}
       disabled={pending}
     >
+      <LogOut size={14} className="mr-1 inline-block" />
       {pending ? "Signing out…" : "Sign out"}
     </button>
   );
