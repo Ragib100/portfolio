@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { requireAdminSession } from "@/lib/auth/session";
-import { getProfile, saveProfile } from "@/lib/data/profile";
+import { saveProfile } from "@/lib/data/profile";
 
 const profileSchema = z
   .object({
@@ -26,25 +26,6 @@ function hasSameOrigin(request: Request) {
     return new URL(origin).origin === new URL(request.url).origin;
   } catch {
     return false;
-  }
-}
-
-export async function GET() {
-  try {
-    await requireAdminSession();
-  } catch {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  }
-
-  try {
-    return NextResponse.json({
-      profile: await getProfile(),
-    });
-  } catch {
-    return NextResponse.json(
-      { error: "Unable to load profile. Try again." },
-      { status: 500 },
-    );
   }
 }
 
