@@ -12,6 +12,7 @@ const profileSchema = z
     professionalTitle: z.string().trim().max(160),
     tagline: z.string().trim().max(300),
     location: z.string().trim().max(160),
+    phone: z.number().int().nonnegative().safe().nullable(),
     availableForWork: z.boolean(),
     about: z.string().trim().max(10_000),
   })

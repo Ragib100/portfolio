@@ -9,6 +9,7 @@ export type Profile = {
   professionalTitle: string;
   tagline: string;
   location: string;
+  phone: number | null;
   availableForWork: boolean;
   about: string;
 };

@@ -42,6 +42,10 @@ export async function saveProfile(formData: FormData) {
     professionalTitle: String(formData.get("professional-title") ?? "").trim(),
     tagline: String(formData.get("tagline") ?? "").trim(),
     location: String(formData.get("location") ?? "").trim(),
+    phone: (() => {
+      const phone = String(formData.get("phone") ?? "").trim();
+      return phone === "" ? null : Number(`880${phone}`);
+    })(),
     availableForWork: formData.get("availability") === "on",
     about: String(formData.get("about") ?? "").trim(),
   };

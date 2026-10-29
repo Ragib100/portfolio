@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { GoogleAuthProvider, inMemoryPersistence, setPersistence, signInWithPopup, signOut } from "firebase/auth";
 import { getFirebaseAuth } from "@/lib/firebase/client";
+import { GoogleIcon } from "@/components/icon";
 
 export function LoginForm() {
   const router = useRouter();
@@ -52,7 +53,10 @@ export function LoginForm() {
         onClick={handleSignIn}
         disabled={pending}
       >
-        {pending ? "Signing in…" : "Continue with Google"}
+        <span className="inline-flex items-center justify-center gap-2">
+          <GoogleIcon />
+          {pending ? "Signing in…" : "Continue with Google"}
+        </span>
       </button>
       {error ? <p className="text-sm text-red-700" role="alert">{error}</p> : null}
     </div>

@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/admin/image-upload";
 import { ProfileSubmitButton } from "@/components/admin/profile-submit-button";
+import { PhoneNumberInput } from "@/components/admin/phone-number-input";
 import { getProfile } from "@/lib/data/profile";
 
 const fieldClass =
@@ -57,14 +58,23 @@ async function ProfileContent() {
                   defaultValue={profile?.professionalTitle ?? ""}
                 />
               </label>
-              <label
-                className={`${labelClass} col-span-2 max-[600px]:col-span-1`}
-              >
+              <label className={labelClass}>
                 <span>Tagline</span>
                 <input
                   className={fieldClass}
                   name="tagline"
                   defaultValue={profile?.tagline ?? ""}
+                />
+              </label>
+              <label className={labelClass}>
+                <span>Phone number</span>
+                <PhoneNumberInput
+                  className={fieldClass}
+                  defaultValue={profile?.phone == null
+                    ? ""
+                    : String(profile.phone).startsWith("880")
+                      ? String(profile.phone).slice(3)
+                      : String(profile.phone)}
                 />
               </label>
               <label className={labelClass}>
