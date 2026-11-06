@@ -1,11 +1,11 @@
-import { saveProfile } from "./action";
+import { saveProfile, getProfile } from "./action";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/admin/image-upload";
-import { ProfileSubmitButton } from "@/components/admin/profile-submit-button";
-import { getProfile } from "@/lib/data/profile";
+import { SubmitButton } from "@/components/admin/submit-button";
+import { PhoneNumberInput } from "@/components/admin/phone-number-input";
 
 const fieldClass =
   "w-full rounded-md border border-zinc-200 bg-white px-3 py-2.5 text-xs text-zinc-800 outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-indigo-100";
@@ -57,14 +57,23 @@ async function ProfileContent() {
                   defaultValue={profile?.professionalTitle ?? ""}
                 />
               </label>
-              <label
-                className={`${labelClass} col-span-2 max-[600px]:col-span-1`}
-              >
+              <label className={labelClass}>
                 <span>Tagline</span>
                 <input
                   className={fieldClass}
                   name="tagline"
                   defaultValue={profile?.tagline ?? ""}
+                />
+              </label>
+              <label className={labelClass}>
+                <span>Phone number</span>
+                <PhoneNumberInput
+                  className={fieldClass}
+                  defaultValue={profile?.phone == null
+                    ? ""
+                    : String(profile.phone).startsWith("880")
+                      ? String(profile.phone).slice(3)
+                      : String(profile.phone)}
                 />
               </label>
               <label className={labelClass}>
@@ -95,7 +104,7 @@ async function ProfileContent() {
               </label>
             </div>
             <div className="mt-5 flex justify-end border-t border-zinc-100 pt-4">
-              <ProfileSubmitButton />
+              <SubmitButton />
             </div>
           </section>
         </form>

@@ -31,11 +31,7 @@ async function AdminSessionGuard({
   await connection();
 
   const session = await getAdminSession();
-
-  if (!session) {
-    redirect("/admin/login");
-  }
+  if (!session) redirect("/admin/login?invalid=true");
 
   return <AdminShell>{children}</AdminShell>;
-  return <>{children}</>;
 }
