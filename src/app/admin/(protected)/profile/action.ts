@@ -80,7 +80,7 @@ export async function saveProfile(formData: FormData) {
   const { origin, cookie } = await getOrigin();
   const profile = await buildProfileFromForm(formData);
 
-  const response = await fetch(new URL("/api/admin/profile", origin), {
+  const response = await fetch(new URL("/api/profile", origin), {
     method: "POST",
     headers: {
       "content-type": "application/json",
