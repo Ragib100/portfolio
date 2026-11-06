@@ -5,12 +5,7 @@ import { redirect } from "next/navigation";
 import { getOrigin } from "@/lib/site_origin/getOrigin";
 import { requireAdminSession } from "@/lib/auth/session";
 import { uploadProfileImage } from "@/lib/cloudinary/profile-image";
-import {
-  getProfile as getStoredProfile,
-  serializeProfile,
-  type ProfileInput,
-  type SerializedProfile,
-} from "@/lib/data/profile";
+import { type ProfileInput, type SerializedProfile } from "@/lib/data/profile";
 
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 const BD_COUNTRY_CODE = "880";
@@ -21,7 +16,7 @@ function getText(formData: FormData, key: string) {
 
 /** Uploads a new image if one was chosen, otherwise keeps the current one. */
 async function resolveImageUrl(formData: FormData) {
-  const currentProfile = await getStoredProfile();
+  const currentProfile = await getProfile();
   const currentUrl = currentProfile?.image ?? null;
 
   const image = formData.get("image");
@@ -70,8 +65,17 @@ async function buildProfileFromForm(formData: FormData): Promise<ProfileInput> {
 export async function getProfile(): Promise<SerializedProfile | null> {
   await requireAdminSession();
 
-  const profile = await getStoredProfile();
-  return profile ? serializeProfile(profile) : null;
+  const { origin, cookie } = await getOrigin();
+  const response = await fetch(new URL("/api/profile", origin), {
+    headers: { cookie },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load profile. Please try again.");
+  }
+
+  return response.json();
 }
 
 export async function saveProfile(formData: FormData) {
