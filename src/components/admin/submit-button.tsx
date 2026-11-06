@@ -1,10 +1,10 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle,Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function ProfileSubmitButton() {
+export function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
@@ -15,7 +15,8 @@ export function ProfileSubmitButton() {
       aria-live="polite"
     >
       {pending && <LoaderCircle className="size-3 animate-spin" aria-hidden="true" />}
-      {pending ? "Saving…" : "Save profile"}
+      <Save size={13} />
+      {pending ? "Saving…" : "Save changes"}
     </Button>
   );
 }

@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdminSession } from "@/lib/auth/session";
 import { saveContactLinks } from "@/lib/data/contact";
+import { checkOrigin } from "@/lib/site_origin/checkOrigin";
+import { HttpError } from "@/lib/http-error";
 
 const linksSchema = z.array(z.object({
   id: z.string().min(1).max(100),
@@ -14,18 +16,14 @@ const linksSchema = z.array(z.object({
   }
 });
 
-function hasSameOrigin(request: Request) {
-  const origin = request.headers.get("origin");
-  if (!origin) return false;
-  try {
-    return new URL(origin).origin === new URL(request.url).origin;
-  } catch {
-    return false;
-  }
-}
-
 export async function PUT(request: Request) {
-  if (!hasSameOrigin(request)) return NextResponse.json({ error: "Request rejected." }, { status: 403 });
+  try {
+    await checkOrigin(request);
+  } catch (error) {
+    const status = error instanceof HttpError ? error.status : 403;
+    return NextResponse.json({ error: "Request rejected." }, { status });
+  }
+
   try {
     await requireAdminSession();
   } catch {
@@ -38,8 +36,12 @@ export async function PUT(request: Request) {
   } catch {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
+
   const parsed = linksSchema.safeParse(body);
-  if (!parsed.success) return NextResponse.json({ error: "Invalid contact links." }, { status: 400 });
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid contact links." }, { status: 400 });
+  }
+
   try {
     await saveContactLinks(parsed.data);
     return NextResponse.json({ ok: true });

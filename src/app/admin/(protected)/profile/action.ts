@@ -1,8 +1,8 @@
 "use server";
 
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { getOrigin } from "@/lib/site_origin/getOrigin";
 import { requireAdminSession } from "@/lib/auth/session";
 import { uploadProfileImage } from "@/lib/cloudinary/profile-image";
 import {
@@ -17,22 +17,6 @@ const BD_COUNTRY_CODE = "880";
 
 function getText(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
-}
-
-/** Builds the site origin (e.g. https://example.com) from the incoming request headers. */
-async function getSiteOrigin() {
-  const requestHeaders = await headers();
-  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
-  const protocol = requestHeaders.get("x-forwarded-proto") ?? "http";
-
-  if (!host || (protocol !== "http" && protocol !== "https")) {
-    throw new Error("Unable to determine the site address to save your profile.");
-  }
-
-  return {
-    origin: `${protocol}://${host}`,
-    cookie: requestHeaders.get("cookie") ?? "",
-  };
 }
 
 /** Uploads a new image if one was chosen, otherwise keeps the current one. */
@@ -93,7 +77,7 @@ export async function getProfile(): Promise<SerializedProfile | null> {
 export async function saveProfile(formData: FormData) {
   await requireAdminSession();
 
-  const { origin, cookie } = await getSiteOrigin();
+  const { origin, cookie } = await getOrigin();
   const profile = await buildProfileFromForm(formData);
 
   const response = await fetch(new URL("/api/admin/profile", origin), {

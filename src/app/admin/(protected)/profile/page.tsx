@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/admin/image-upload";
-import { ProfileSubmitButton } from "@/components/admin/profile-submit-button";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { PhoneNumberInput } from "@/components/admin/phone-number-input";
 
 const fieldClass =
@@ -104,7 +104,7 @@ async function ProfileContent() {
               </label>
             </div>
             <div className="mt-5 flex justify-end border-t border-zinc-100 pt-4">
-              <ProfileSubmitButton />
+              <SubmitButton />
             </div>
           </section>
         </form>

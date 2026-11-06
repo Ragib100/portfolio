@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { requireAdminSession } from "@/lib/auth/session";
+import { checkOrigin } from "@/lib/site_origin/checkOrigin";
 import { getProfile, saveProfile, serializeProfile } from "@/lib/data/profile";
 
 const profileSchema = z
@@ -23,11 +24,9 @@ function errorResponse(message: string, status: number) {
 }
 
 function hasSameOrigin(request: Request) {
-  const origin = request.headers.get("origin");
-  if (!origin) return false;
-
   try {
-    return new URL(origin).origin === new URL(request.url).origin;
+    checkOrigin(request);
+    return true;
   } catch {
     return false;
   }

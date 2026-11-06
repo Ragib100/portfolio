@@ -6,7 +6,8 @@ import { Suspense } from "react";
 import { saveContactSet } from "./actions";
 import { DraggableLinkList } from "@/components/admin/draggable-link-list";
 import { NewLinkFields } from "@/components/admin/new-link-fields";
-import { getContactLinks, type ContactLink } from "@/lib/data/contact";
+import { getContactLinks, type ContactLink } from "./actions";
+import { SubmitButton } from "@/components/admin/submit-button";
 
 const labelClass = "flex flex-col gap-1.5 text-[11px] font-medium text-zinc-600";
 const inputClass = "w-full rounded-md border border-zinc-200 bg-white px-2.5 py-2 text-xs outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/10";
@@ -88,8 +89,7 @@ async function ContactContent() {
             </div>
             <div className="mt-5 flex justify-end border-t border-zinc-100 pt-4">
               <div className="flex items-center gap-2">
-                {/* <a href="/admin/contact" className="rounded-md border border-zinc-200 px-3 py-2 text-[11px] font-medium text-zinc-600 transition hover:bg-zinc-50">Discard changes</a> */}
-                <button type="submit" disabled={loadError} className="inline-flex items-center gap-1.5 rounded-md bg-[var(--accent)] px-3 py-2 text-[11px] font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"><Save size={13} /> Save changes</button>
+                <SubmitButton />
               </div>
             </div>
           </form>
