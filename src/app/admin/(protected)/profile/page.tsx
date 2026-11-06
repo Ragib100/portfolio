@@ -2,7 +2,6 @@ import { saveProfile, getProfile } from "./action";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/admin/image-upload";
 import { SubmitButton } from "@/components/admin/submit-button";
 import { PhoneNumberInput } from "@/components/admin/phone-number-input";
@@ -69,11 +68,7 @@ async function ProfileContent() {
                 <span>Phone number</span>
                 <PhoneNumberInput
                   className={fieldClass}
-                  defaultValue={profile?.phone == null
-                    ? ""
-                    : String(profile.phone).startsWith("880")
-                      ? String(profile.phone).slice(3)
-                      : String(profile.phone)}
+                  defaultValue={profile?.phone ?? ""}
                 />
               </label>
               <label className={labelClass}>
