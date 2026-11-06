@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { requireAdminSession } from "@/lib/auth/session";
 import { checkOrigin } from "@/lib/site_origin/checkOrigin";
-import { getProfile, saveProfile, serializeProfile } from "@/lib/data/profile";
+import { getProfile, saveProfile } from "@/lib/action/profile";
 
 const profileSchema = z
   .object({
@@ -52,7 +52,7 @@ export async function GET() {
       return errorResponse("Profile not found.", 404);
     }
 
-    return NextResponse.json(serializeProfile(profile), {
+    return NextResponse.json(profile, {
       headers: { "Cache-Control": "no-store" },
     });
   } catch {
