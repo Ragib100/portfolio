@@ -67,7 +67,7 @@ export async function getProfile(): Promise<SerializedProfile | null> {
 
   const { origin, cookie } = await getOrigin();
   const response = await fetch(new URL("/api/profile", origin), {
-    headers: { cookie },
+    headers: { cookie, origin },
     cache: "no-store",
   });
 
