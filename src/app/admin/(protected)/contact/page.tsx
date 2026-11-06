@@ -6,7 +6,8 @@ import { Suspense } from "react";
 import { saveContactSet } from "./actions";
 import { DraggableLinkList } from "@/components/admin/draggable-link-list";
 import { NewLinkFields } from "@/components/admin/new-link-fields";
-import { getContactLinks, type ContactLink } from "./actions";
+import { getContactLinks } from "./actions";
+import { type ContactLink } from "@/lib/data/contact";
 import { SubmitButton } from "@/components/admin/submit-button";
 
 const labelClass = "flex flex-col gap-1.5 text-[11px] font-medium text-zinc-600";

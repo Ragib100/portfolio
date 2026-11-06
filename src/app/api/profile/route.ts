@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireAdminSession } from "@/lib/auth/session";
 import { checkOrigin } from "@/lib/site_origin/checkOrigin";
 import { getProfile, saveProfile } from "@/lib/action/profile";
+import { HttpError } from "@/lib/http-error";
 
 const profileSchema = z
   .object({
@@ -23,27 +24,19 @@ function errorResponse(message: string, status: number) {
   return NextResponse.json({ error: message }, { status });
 }
 
-function hasSameOrigin(request: Request) {
+export async function GET() {
   try {
-    checkOrigin(request);
-    return true;
-  } catch {
-    return false;
+    await checkOrigin();
   }
-}
+  catch (error) {
+    const status = error instanceof HttpError ? error.status : 403;
+    return NextResponse.json({ error: "Request rejected." }, { status });
+  }
 
-async function isAdmin() {
   try {
     await requireAdminSession();
-    return true;
   } catch {
-    return false;
-  }
-}
-
-export async function GET() {
-  if (!(await isAdmin())) {
-    return errorResponse("Unauthorized.", 401);
+    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
   try {
@@ -61,12 +54,19 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (!hasSameOrigin(request)) {
-    return errorResponse("Request rejected.", 403);
+  try {
+    await checkOrigin(request);
+  }
+  catch (error) {
+    const status = error instanceof HttpError ? error.status : 403;
+    return NextResponse.json({ error: "Request rejected." }, { status });
   }
 
-  if (!(await isAdmin())) {
-    return errorResponse("Unauthorized.", 401);
+  try {
+    await requireAdminSession();
+  }
+  catch {
+    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
   let body: unknown;

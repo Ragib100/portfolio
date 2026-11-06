@@ -4,15 +4,8 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAdminSession } from "@/lib/auth/session";
-import {
-  getContactLinks as loadContactLinks,
-  saveContactLinks,
-  type ContactLink as DataContactLink,
-} from "@/lib/data/contact";
-import { checkOrigin } from "@/lib/site_origin/checkOrigin";
-
-// Type only: erased at build time, so it's allowed in a "use server" file.
-export type ContactLink = DataContactLink;
+import { type ContactLink } from "@/lib/data/contact";
+import { getOrigin } from "@/lib/site_origin/getOrigin";
 
 const linkSchema = z.object({
   id: z.string().min(1).max(100),
@@ -29,11 +22,19 @@ const additionSchema = z.object({
 // Exported from a "use server" file = publicly callable, so it must check admin.
 export async function getContactLinks(): Promise<ContactLink[]> {
   await requireAdminSession();
-  return loadContactLinks();
+  const { origin, cookie } = await getOrigin();
+  const response = await fetch(new URL("/api/contact", origin), {
+    headers: { cookie },
+    cache: "no-store",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch contact links.");
+  }
+  const data = await response.json();
+  return data as ContactLink[];
 }
 
 export async function saveContactSet(formData: FormData) {
-  await checkOrigin();
   await requireAdminSession();
 
   const ids = formData.getAll("id").map(String);
@@ -87,8 +88,21 @@ export async function saveContactSet(formData: FormData) {
     })),
   );
 
+  const { origin, cookie } = await getOrigin();
   try {
-    await saveContactLinks(updatedLinks);
+    const response = await fetch(new URL("/api/contact", origin), {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        cookie,
+        origin,
+      },
+      body: JSON.stringify(updatedLinks),
+      cache: "no-store",
+    });
+    if (!response.ok) {
+      throw new Error("Unable to save contact links. Please try again.");
+    }
   } catch {
     throw new Error("Unable to save contact links. Please try again.");
   }
