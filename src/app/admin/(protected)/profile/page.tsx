@@ -1,4 +1,4 @@
-import { saveProfile } from "./action";
+import { saveProfile, getProfile } from "./action";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/admin/image-upload";
 import { ProfileSubmitButton } from "@/components/admin/profile-submit-button";
 import { PhoneNumberInput } from "@/components/admin/phone-number-input";
-import { getProfile } from "@/lib/data/profile";
 
 const fieldClass =
   "w-full rounded-md border border-zinc-200 bg-white px-3 py-2.5 text-xs text-zinc-800 outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-indigo-100";

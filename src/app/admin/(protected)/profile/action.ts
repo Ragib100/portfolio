@@ -2,59 +2,106 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+
 import { requireAdminSession } from "@/lib/auth/session";
-import { getProfile } from "@/lib/data/profile";
 import { uploadProfileImage } from "@/lib/cloudinary/profile-image";
+import {
+  getProfile as getStoredProfile,
+  serializeProfile,
+  type ProfileInput,
+  type SerializedProfile,
+} from "@/lib/data/profile";
 
-export async function saveProfile(formData: FormData) {
-  await requireAdminSession();
+const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
+const BD_COUNTRY_CODE = "880";
 
+function getText(formData: FormData, key: string) {
+  return String(formData.get(key) ?? "").trim();
+}
+
+/** Builds the site origin (e.g. https://example.com) from the incoming request headers. */
+async function getSiteOrigin() {
   const requestHeaders = await headers();
   const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
   const protocol = requestHeaders.get("x-forwarded-proto") ?? "http";
+
   if (!host || (protocol !== "http" && protocol !== "https")) {
     throw new Error("Unable to determine the site address to save your profile.");
   }
 
-  const origin = `${protocol}://${host}`;
-  const forwardedHeaders = {
+  return {
+    origin: `${protocol}://${host}`,
     cookie: requestHeaders.get("cookie") ?? "",
-    origin,
   };
-  const currentProfile = await getProfile();
-  const existingImageUrl = currentProfile?.image ?? null;
+}
+
+/** Uploads a new image if one was chosen, otherwise keeps the current one. */
+async function resolveImageUrl(formData: FormData) {
+  const currentProfile = await getStoredProfile();
+  const currentUrl = currentProfile?.image ?? null;
 
   const image = formData.get("image");
-  let imageUrl = existingImageUrl;
-
-  if (image instanceof File && image.size > 0) {
-    if (!image.type.startsWith("image/") || image.size > 5 * 1024 * 1024) {
-      throw new Error("Choose an image file that is 5 MB or smaller.");
-    }
-
-    const uploaded = await uploadProfileImage(image);
-    imageUrl = uploaded.url;
+  if (!(image instanceof File) || image.size === 0) {
+    return currentUrl;
   }
 
-  const profile = {
-    fullName: String(formData.get("full-name") ?? "").trim(),
-    image: imageUrl,
-    professionalTitle: String(formData.get("professional-title") ?? "").trim(),
-    tagline: String(formData.get("tagline") ?? "").trim(),
-    location: String(formData.get("location") ?? "").trim(),
-    phone: (() => {
-      const phone = String(formData.get("phone") ?? "").trim();
-      return phone === "" ? null : Number(`880${phone}`);
-    })(),
+  if (!image.type.startsWith("image/") || image.size > MAX_IMAGE_SIZE_BYTES) {
+    throw new Error("Choose an image file that is 5 MB or smaller.");
+  }
+
+  const uploaded = await uploadProfileImage(image);
+  return uploaded.url;
+}
+
+/** Empty input becomes null; otherwise the digits are prefixed with the country code. */
+function parsePhone(rawPhone: string) {
+  if (rawPhone === "") return null;
+
+  if (!/^\d+$/.test(rawPhone)) {
+    throw new Error("Phone number can only contain digits.");
+  }
+
+  return Number(`${BD_COUNTRY_CODE}${rawPhone}`);
+}
+
+async function buildProfileFromForm(formData: FormData): Promise<ProfileInput> {
+  return {
+    fullName: getText(formData, "full-name"),
+    image: await resolveImageUrl(formData),
+    professionalTitle: getText(formData, "professional-title"),
+    tagline: getText(formData, "tagline"),
+    location: getText(formData, "location"),
+    phone: parsePhone(getText(formData, "phone")),
     availableForWork: formData.get("availability") === "on",
-    about: String(formData.get("about") ?? "").trim(),
+    about: getText(formData, "about"),
   };
+}
+
+/**
+ * Returns the current profile for the admin page, or null if none exists yet.
+ *
+ * Exports from a "use server" file are public endpoints, so the admin
+ * check must live here and not only in the page that calls it.
+ */
+export async function getProfile(): Promise<SerializedProfile | null> {
+  await requireAdminSession();
+
+  const profile = await getStoredProfile();
+  return profile ? serializeProfile(profile) : null;
+}
+
+export async function saveProfile(formData: FormData) {
+  await requireAdminSession();
+
+  const { origin, cookie } = await getSiteOrigin();
+  const profile = await buildProfileFromForm(formData);
 
   const response = await fetch(new URL("/api/admin/profile", origin), {
     method: "POST",
     headers: {
       "content-type": "application/json",
-      ...forwardedHeaders,
+      cookie,
+      origin,
     },
     body: JSON.stringify(profile),
     cache: "no-store",

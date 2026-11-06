@@ -1,9 +1,12 @@
 import "server-only";
 
-import { FieldValue } from "firebase-admin/firestore";
+import { FieldValue, type Timestamp } from "firebase-admin/firestore";
 import { getFirebaseAdminFirestore } from "@/lib/firebase/admin";
 
-export type ProfileData = {
+const PROFILE_DOC_PATH = "site/profile";
+
+/** Fields the admin can edit. */
+export type ProfileInput = {
   fullName: string;
   image: string | null;
   professionalTitle: string;
@@ -12,26 +15,53 @@ export type ProfileData = {
   phone: number | null;
   availableForWork: boolean;
   about: string;
-  createdAt?: unknown;
-  updatedAt?: unknown;
 };
 
+/** Shape stored in Firestore. */
+export type ProfileData = ProfileInput & {
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
+};
+
+/** JSON-safe shape returned by the API. */
+export type SerializedProfile = ProfileInput & {
+  createdAt: string | null;
+  updatedAt: string | null;
+};
+
+function getProfileRef() {
+  return getFirebaseAdminFirestore().doc(PROFILE_DOC_PATH);
+}
+
 export async function getProfile(): Promise<ProfileData | null> {
-  const snapshot = await getFirebaseAdminFirestore().doc("site/profile").get();
+  const snapshot = await getProfileRef().get();
   return snapshot.exists ? (snapshot.data() as ProfileData) : null;
 }
 
-export async function saveProfile(profile: Omit<ProfileData, "createdAt" | "updatedAt">) {
+/** Converts Firestore Timestamps to ISO strings so the profile can be sent as JSON. */
+export function serializeProfile(profile: ProfileData): SerializedProfile {
+  const { createdAt, updatedAt, ...fields } = profile;
+
+  return {
+    ...fields,
+    createdAt: createdAt?.toDate().toISOString() ?? null,
+    updatedAt: updatedAt?.toDate().toISOString() ?? null,
+  };
+}
+
+export async function saveProfile(profile: ProfileInput) {
   const firestore = getFirebaseAdminFirestore();
-  const profileRef = firestore.doc("site/profile");
+  const profileRef = getProfileRef();
 
   await firestore.runTransaction(async (transaction) => {
-    const existingProfile = await transaction.get(profileRef);
+    const existing = await transaction.get(profileRef);
+
     transaction.set(
       profileRef,
       {
         ...profile,
-        ...(existingProfile.exists ? {} : { createdAt: FieldValue.serverTimestamp() }),
+        // Only set createdAt the first time the profile is saved.
+        ...(existing.exists ? {} : { createdAt: FieldValue.serverTimestamp() }),
         updatedAt: FieldValue.serverTimestamp(),
       },
       { merge: true },
