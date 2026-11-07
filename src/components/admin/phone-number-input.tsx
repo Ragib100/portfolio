@@ -12,9 +12,8 @@ export function PhoneNumberInput({ className, defaultValue }: PhoneNumberInputPr
 
   return (
     <span className="flex items-center">
-      <span className="rounded-l-md border border-r-0 border-zinc-200 bg-zinc-50 px-3 py-2.5 text-xs text-zinc-600">+880</span>
       <input
-        className={`${className} rounded-l-none`}
+        className={className}
         name="phone"
         type="text"
         inputMode="numeric"
