@@ -11,7 +11,7 @@ export async function getAdminSession() {
   if (!sessionCookie) return null;
 
   try {
-    const decoded = await getFirebaseAdminAuth().verifySessionCookie(sessionCookie, true);
+    const decoded = await getFirebaseAdminAuth().verifySessionCookie(sessionCookie, false);
     if (!decoded.email || decoded.email_verified !== true || !isAllowedAdmin(decoded.email)) return null;
     return decoded;
   } catch {
