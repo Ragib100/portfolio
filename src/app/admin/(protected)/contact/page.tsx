@@ -3,10 +3,9 @@ import {
 } from "lucide-react";
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { saveContactSet } from "./actions";
 import { DraggableLinkList } from "@/components/admin/draggable-link-list";
 import { NewLinkFields } from "@/components/admin/new-link-fields";
-import { getContactLinks } from "./actions";
+import { getContactLinks, saveContactSet } from "./actions";
 import { type ContactLink } from "@/lib/data/contact";
 import { SubmitButton } from "@/components/admin/submit-button";
 
