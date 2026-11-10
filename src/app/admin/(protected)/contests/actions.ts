@@ -4,14 +4,15 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdminSession } from "@/lib/auth/session";
 import { checkOrigin } from "@/lib/site_origin/checkOrigin";
-import { parseContestForm, type ContestFormState } from "@/lib/contests/schema";
+import { parseContestForm } from "@/lib/contests/validation";
+import type { ContestFormState } from "@/lib/data/contest";
 import {
   createContest,
   isValidContestId,
   removeContest,
   setContestPublished,
   updateContest,
-} from "@/lib/data/contests";
+} from "@/lib/contests/service";
 
 // Every exported function here is a public endpoint, so each one checks origin + admin.
 async function guard() {

@@ -3,8 +3,9 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { CalendarDays, ExternalLink, Eye, EyeOff, Pencil, Plus, Trash2, Trophy } from "lucide-react";
 import { requireAdminSession } from "@/lib/auth/session";
-import { listContests } from "@/lib/data/contests";
-import { formatContestDate, type Contest } from "@/lib/contests/schema";
+import { type Contest } from "@/lib/data/contest";
+import { listContests } from "@/lib/contests/service";
+import { formatContestDate } from "@/lib/contests/validation";
 import { ContestForm } from "@/components/admin/contest-form";
 import { deleteContest, togglePublished } from "./actions";
 
@@ -111,14 +112,12 @@ async function ContestsContent({ searchParams }: { searchParams: Promise<{ edit?
                       <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-zinc-500">
                         <span>{c.category}</span>
                         <span className="inline-flex items-center gap-1"><CalendarDays size={11} />{formatContestDate(c.date)}</span>
-                        <span>{c.mode}</span>
-                        {c.organizer ? <span>{c.organizer}</span> : null}
                       </p>
-                      {c.rank && c.totalParticipants || c.solved !== undefined || c.prize || c.teamName ? (
+                      {c.rank && c.totalParticipants || c.solved !== undefined || c.totalProblems !== undefined || c.teamName ? (
                         <p className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-zinc-600">
                           {c.rank && c.totalParticipants ? <span>Rank {c.rank} of {c.totalParticipants}</span> : null}
                           {c.solved !== undefined ? <span>{c.solved} solved</span> : null}
-                          {c.prize ? <span>{c.prize}</span> : null}
+                          {c.totalProblems !== undefined ? <span>{c.totalProblems} problems</span> : null}
                           {c.teamName ? <span>Team {c.teamName}</span> : null}
                         </p>
                       ) : null}

@@ -4,13 +4,8 @@ import Link from "next/link";
 import { useActionState, type ReactNode } from "react";
 import { Loader2, Save } from "lucide-react";
 import { saveContest } from "@/app/admin/(protected)/contests/actions";
-import {
-  CONTEST_CATEGORIES,
-  CONTEST_MODES,
-  toFormValues,
-  type Contest,
-  type ContestFormState,
-} from "@/lib/contests/schema";
+import { CONTEST_CATEGORIES, type Contest, type ContestFormState } from "@/lib/data/contest";
+import { toFormValues } from "@/lib/contests/validation";
 
 const inputClass =
   "w-full rounded-md border border-zinc-200 bg-white px-2.5 py-2 text-xs outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/10 aria-[invalid=true]:border-red-400";
@@ -75,16 +70,8 @@ export function ContestForm({ contest }: { contest?: Contest }) {
             {CONTEST_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
         </Field>
-        <Field label="Mode" error={err("mode")}>
-          <select className={inputClass} name="mode" required defaultValue={values.mode} aria-invalid={invalid("mode")}>
-            {CONTEST_MODES.map((m) => <option key={m} value={m}>{m}</option>)}
-          </select>
-        </Field>
         <Field label="Date" error={err("date")}>
           <input className={inputClass} type="date" name="date" required defaultValue={values.date} aria-invalid={invalid("date")} />
-        </Field>
-        <Field label="Organizer" error={err("organizer")}>
-          <input className={inputClass} name="organizer" maxLength={120} defaultValue={values.organizer} aria-invalid={invalid("organizer")} placeholder="e.g. MIST" />
         </Field>
       </Group>
 
@@ -92,14 +79,14 @@ export function ContestForm({ contest }: { contest?: Contest }) {
         <Field label="Rank" error={err("rank")}>
           <input className={inputClass} type="number" inputMode="numeric" min={1} name="rank" defaultValue={values.rank} aria-invalid={invalid("rank")} placeholder="e.g. 8" />
         </Field>
-        <Field label="Total participants" error={err("totalParticipants")}>
+        <Field label="Total teams" error={err("totalParticipants")}>
           <input className={inputClass} type="number" inputMode="numeric" min={1} name="totalParticipants" defaultValue={values.totalParticipants} aria-invalid={invalid("totalParticipants")} placeholder="e.g. 120" />
         </Field>
         <Field label="Solved problems" error={err("solved")}>
           <input className={inputClass} type="number" inputMode="numeric" min={0} max={100} name="solved" defaultValue={values.solved} aria-invalid={invalid("solved")} />
         </Field>
-        <Field label="Prize" error={err("prize")}>
-          <input className={inputClass} name="prize" maxLength={120} defaultValue={values.prize} aria-invalid={invalid("prize")} placeholder="e.g. Champion" />
+        <Field label="Total problems" error={err("totalProblems")}>
+          <input className={inputClass} type="number" inputMode="numeric" min={0} name="totalProblems" defaultValue={values.totalProblems} aria-invalid={invalid("totalProblems")} />
         </Field>
         <Field label="Team name" error={err("teamName")} hint="Optional. Only the team name is shown publicly." className="col-span-2 max-[500px]:col-span-1">
           <input className={inputClass} name="teamName" maxLength={80} defaultValue={values.teamName} aria-invalid={invalid("teamName")} />
