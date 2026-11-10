@@ -4,10 +4,9 @@ import { Suspense } from "react";
 import { CalendarDays, ExternalLink, Eye, EyeOff, Pencil, Plus, Trash2, Trophy } from "lucide-react";
 import { requireAdminSession } from "@/lib/auth/session";
 import { type Contest } from "@/lib/data/contest";
-import { listContests } from "@/lib/contests/service";
 import { formatContestDate } from "@/lib/contests/validation";
 import { ContestForm } from "@/components/admin/contest-form";
-import { deleteContest, togglePublished } from "./actions";
+import { deleteContest, togglePublished, getContests } from "./actions";
 
 const panelClass = "rounded-[9px] border border-[var(--admin-line)] bg-white p-[18px] shadow-sm";
 const iconButton =
@@ -37,7 +36,7 @@ async function ContestsContent({ searchParams }: { searchParams: Promise<{ edit?
   let contests: Contest[] = [];
   let loadError = false;
   try {
-    contests = await listContests();
+    contests = await getContests();
   } catch {
     loadError = true;
   }

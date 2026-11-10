@@ -29,6 +29,7 @@ export async function checkOrigin(request?: Request) {
 
   const h = request ? request.headers : await headers();
   const origin = toOrigin(h.get("origin")) ?? toOrigin(h.get("referer"));
+  console.log("checkOrigin: origin:", origin, "allowed:", allowedOrigins());
 
   if (!origin) throw new HttpError(403, "Request rejected: missing origin.");
   if (!allowedOrigins().has(origin)) {
