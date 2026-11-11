@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { guard } from "@/lib/auth/guard";
 import { uploadProfileImage } from "@/lib/cloudinary/profile-image";
-import type { ProfileInput, SerializedProfile } from "@/lib/data/profile";
+import type { ProfileData } from "@/lib/data/profile";
 import {
   getProfile as getProfileFromService,
   saveProfile as saveProfileToService,
@@ -41,7 +41,7 @@ async function resolveImageUrl(formData: FormData): Promise<string | null> {
 
 async function buildProfileFromForm(
   formData: FormData,
-): Promise<ProfileInput> {
+): Promise<ProfileData> {
   return {
     fullName: getText(formData, "full-name"),
     image: await resolveImageUrl(formData),
@@ -58,7 +58,7 @@ async function buildProfileFromForm(
  * Returns the current profile for the admin page,
  * or null if no profile exists yet.
  */
-export async function getProfile(): Promise<SerializedProfile | null> {
+export async function getProfile(): Promise<ProfileData | null> {
   await guard();
 
   return getProfileFromService();

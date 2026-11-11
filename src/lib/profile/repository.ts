@@ -3,11 +3,7 @@ import "server-only";
 import { FieldValue } from "firebase-admin/firestore";
 
 import { getFirebaseAdminFirestore } from "@/lib/firebase/admin";
-import type {
-  ProfileInput,
-  ProfileData,
-  SerializedProfile,
-} from "@/lib/data/profile";
+import type { ProfileData } from "@/lib/data/profile";
 
 const PROFILE_DOC_PATH = "site/profile";
 
@@ -15,27 +11,22 @@ function getProfileRef() {
   return getFirebaseAdminFirestore().doc(PROFILE_DOC_PATH);
 }
 
-export async function getProfile(): Promise<SerializedProfile | null> {
+export async function getProfile(): Promise<ProfileData | null> {
   const profileDoc = await getProfileRef().get();
 
   if (!profileDoc.exists) {
     return null;
   }
 
-  const {
-    createdAt,
-    updatedAt,
-    ...profileData
-  } = profileDoc.data() as ProfileData;
+  const data = profileDoc.data();
 
-  return {
-    ...profileData,
-    createdAt: createdAt?.toDate().toISOString() ?? null,
-    updatedAt: updatedAt?.toDate().toISOString() ?? null,
-  };
+  if (!data) { return null; }
+
+  const { createdAt, updatedAt, ...profileData } = data;
+  return profileData as ProfileData;
 }
 
-export async function saveProfile(profile: ProfileInput): Promise<void> {
+export async function saveProfile(profile: ProfileData): Promise<void> {
   const firestore = getFirebaseAdminFirestore();
   const profileRef = getProfileRef();
 

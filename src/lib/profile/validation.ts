@@ -1,5 +1,5 @@
 import { profileSchema } from "./schema";
-import type { ProfileInput } from "@/lib/data/profile";
+import type { ProfileData } from "@/lib/data/profile";
 
 const BD_COUNTRY_CODE = "880";
 
@@ -49,7 +49,7 @@ function normalizeBangladeshPhone(rawPhone: string): string | null {
   return `+${BD_COUNTRY_CODE}${nationalNumber}`;
 }
 
-export function validateProfile(input: unknown): ProfileInput {
+export function validateProfile(input: ProfileData): ProfileData {
   const parsed = profileSchema.parse(input);
 
   return {

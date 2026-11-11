@@ -1,6 +1,6 @@
 import { type Timestamp } from "firebase-admin/firestore";
 
-export type ProfileInput = {
+export type ProfileData = {
   fullName: string;
   image: string | null;
   professionalTitle: string;
@@ -9,14 +9,4 @@ export type ProfileInput = {
   phone: string | null;
   availableForWork: boolean;
   about: string;
-};
-
-export type ProfileData = ProfileInput & {
-  createdAt?: Timestamp;
-  updatedAt?: Timestamp;
-};
-
-export type SerializedProfile = ProfileInput & {
-  createdAt: string | null;
-  updatedAt: string | null;
 };
