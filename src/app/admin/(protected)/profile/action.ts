@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import { requireAdminSession } from "@/lib/auth/session";
+import { guard } from "@/lib/auth/guard";
 import { uploadProfileImage } from "@/lib/cloudinary/profile-image";
 import type { ProfileInput, SerializedProfile } from "@/lib/data/profile";
 import {
@@ -59,13 +59,13 @@ async function buildProfileFromForm(
  * or null if no profile exists yet.
  */
 export async function getProfile(): Promise<SerializedProfile | null> {
-  await requireAdminSession();
+  await guard();
 
   return getProfileFromService();
 }
 
 export async function saveProfile(formData: FormData): Promise<void> {
-  await requireAdminSession();
+  await guard();
 
   const profile = await buildProfileFromForm(formData);
 
